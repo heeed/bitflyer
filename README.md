@@ -1,3 +1,22 @@
+Bitflyer for Micropython for the BBC micro:bit
+=================================
+
+This is the source code and build tools for bitflyer, a simple game for the micro:bit.
+
+It relies on an I2C 0.96" oled display.
+
+Game python code is embedded in a custom micropython build (hence all the build tooling), along with the image data.
+
+There is a Makefile which knows how to build the final file (that can be copied onto the microbit as usual (drag-drop into the root when plugged-in in mass-storage mode)).
+
+```
+make build/final.hex 
+```
+should produce a file called build/final.hex which is the firmware
+
+** NOTE ** - This is highly unlikely to work out-of-the box.  The toolchain is extremely complex, and relies on many components from many vendors.  There are IP/licensing issues that prevent me from making this too much easier.
+
+
 MicroPython for the BBC micro:bit
 =================================
 

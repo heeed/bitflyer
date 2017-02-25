@@ -6,7 +6,18 @@ QSTR_DEFS = inc/py/qstrdefs.h inc/microbit/qstrdefsport.h
 HEX_SRC = build/bbc-microbit-classic-gcc-nosd/source/microbit-micropython.hex
 HEX_FINAL = build/firmware.hex
 
-all: yotta
+deploy: build/final.hex
+	automator tools/deploy.workflow
+
+build/final.hex: build/bitflyer.py
+	tools/makecombinedhex.py $(HEX_FINAL) build/bitflyer.py > build/final.hex
+
+build/bitflyer.py: yotta bitflyer/*.py
+	cat bitflyer/*.py > build/bitflyer.py.full
+	pyminifier build/bitflyer.py.full > build/bitflyer.py
+
+#bitflyer/imgs.py: bitflyer/images/* tools/imgconvert.py
+#	tools/imgconvert.py bitflyer/images > bitflyer/imgs.py
 
 yotta: inc/genhdr/qstrdefs.generated.h
 	@yt build
@@ -18,14 +29,6 @@ inc/genhdr/qstrdefs.generated.h: $(QSTR_DEFS) tools/makeqstrdata.py inc/microbit
 	$(ECHO) "Generating $@"
 	@cat $(QSTR_DEFS) | sed 's/^Q(.*)/"&"/' | $(CPP) -Iinc -Iinc/microbit - | sed 's/^"\(Q(.*)\)"/\1/' > build/qstrdefs.preprocessed.h
 	@$(PYTHON) tools/makeqstrdata.py build/qstrdefs.preprocessed.h > $@
-
-deploy: $(HEX_FINAL)
-	$(ECHO) "Deploying $<"
-	@mount /dev/sdb
-	@sleep 1s
-	@cp $< /mnt/
-	@sleep 1s
-	@umount /mnt
 
 serial:
 	@picocom /dev/ttyACM0 -b 115200

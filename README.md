@@ -1,6 +1,8 @@
 Bitflyer for Micropython for the BBC micro:bit
 =================================
 
+https://medium.com/@stestagg/the-first-video-game-on-the-bbc-micro-bit-probably-4175fab44da8
+
 This is the source code and build tools for bitflyer, a simple game for the micro:bit.
 
 It relies on an I2C 0.96" oled display.
